@@ -4,6 +4,13 @@ public class Product {
     private String description;
     private double cost;
 
+    public static final int ID_SIZE = 6;
+    public static final int NAME_SIZE = 35;
+    public static final int DESC_SIZE = 75;
+
+    public static final int RECORD_SIZE =
+            (ID_SIZE + NAME_SIZE + DESC_SIZE) * 2 + 8;
+
     // Constructor
     public Product(String ID, String name, String description, double cost) {
         this.ID = ID;
@@ -76,6 +83,27 @@ public class Product {
                 "\"description\":\"" + description + "\"," +
                 "\"cost\":" + cost +
                 "}";
+    }
+
+    public static String padString(String s, int length)
+    {
+        StringBuilder sb = new StringBuilder(s);
+
+        while(sb.length() < length)
+            sb.append(" ");
+
+        if(sb.length() > length)
+            sb.setLength(length);
+
+        return sb.toString();
+    }
+
+    public void writeToFile(java.io.RandomAccessFile file) throws Exception
+    {
+        file.writeChars(padString(ID, ID_SIZE));
+        file.writeChars(padString(name, NAME_SIZE));
+        file.writeChars(padString(description, DESC_SIZE));
+        file.writeDouble(cost);
     }
 
 }
